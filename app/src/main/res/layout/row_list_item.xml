@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/text_view_style"
+    android:layout_gravity="top"
+    >
+
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Titulo"
+        />
+
+    <TextView
+        android:id="@+id/descricao"
+        android:layout_below="@+id/titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Descrição"
+        />
+
+    <TextView
+        android:id="@+id/tipoDescricao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        tools:text="Tipo Descrição"
+        />
+
+</RelativeLayout>
