@@ -19,7 +19,7 @@ public class NotaViewModel extends AndroidViewModel {
         allNotas = mRepository.getAllNotas();
     }
 
-    LiveData<List<Nota>> getAllNotas(){
+    public LiveData<List<Nota>> getAllNotas(){
         return allNotas;
     }
 
