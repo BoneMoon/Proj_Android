@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context=".NewNotaActivity">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtNota"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/notas"
+                android:textColor="@color/Black"
+                android:textSize="60sp"
+                tools:layout_editor_absoluteX="237dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <TextView
+                android:id="@+id/txtTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtNota"
+                android:layout_marginTop="16dp"
+                android:text="@string/titulo"
+                android:textColor="@color/Black"
+                android:textSize="40sp" />
+
+            <EditText
+                android:id="@+id/editTitulo"
+                android:layout_width="527dp"
+                android:layout_height="55dp"
+                android:layout_below="@id/txtTitulo"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="-56dp"
+                android:layout_toRightOf="@id/txtTitulo"
+                android:hint="@string/introduzir_titulo" />
+
+            <TextView
+                android:id="@+id/txtDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTitulo"
+                android:layout_marginTop="54dp"
+                android:text="@string/descri_o"
+                android:textColor="@color/Black"
+                android:textSize="40sp" />
+
+            <EditText
+                android:id="@+id/editDesc"
+                android:layout_width="468dp"
+                android:layout_height="55dp"
+                android:layout_below="@+id/editTitulo"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="54dp"
+                android:layout_toRightOf="@+id/txtDesc"
+                android:hint="@string/introduzir_descri_o" />
+
+            <TextView
+                android:id="@+id/txtTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtDesc"
+                android:layout_marginTop="41dp"
+                android:text="@string/tipo"
+                android:textColor="@color/Black"
+                android:textSize="40sp" />
+
+            <EditText
+                android:id="@+id/editTipo"
+                android:layout_width="543dp"
+                android:layout_height="56dp"
+                android:layout_below="@+id/txtTipo"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="-56dp"
+                android:layout_toRightOf="@+id/txtTipo"
+                android:hint="@string/introduzir_tipo_de_nota" />
+
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTipo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="44dp"
+                android:text="@string/guardar" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
