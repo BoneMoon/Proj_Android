@@ -91,6 +91,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:text="@string/entrarbtn"
+                android:onClick="btnMapa"
                 android:textSize="20sp" />
 
             <Button
