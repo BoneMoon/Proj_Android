@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-
+    //
     public void btnNotas(View view) {
         Intent i = new Intent(MainActivity.this, NotaActivity.class);
         startActivity(i);
