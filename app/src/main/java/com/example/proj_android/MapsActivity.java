@@ -22,7 +22,7 @@ import java.util.Locale;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    public static final float INITIAL_ZOOM = 12f;
+    public static final float INITIAL_ZOOM = 18f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
