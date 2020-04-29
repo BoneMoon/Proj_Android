@@ -1,10 +1,16 @@
 package com.example.proj_android;
 
+import android.content.Intent;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
 public class Problema {
+
+    @SerializedName("id")
+    @Expose
+    private Integer id;
 
     @SerializedName("titulo")
     @Expose
@@ -22,21 +28,26 @@ public class Problema {
     @Expose
     private String foto;
 
-    @SerializedName("localizacao")
+    @SerializedName("latitude")
     @Expose
-    private String localizacao;
+    private Double latitude;
+
+    @SerializedName("longitude")
+    @Expose
+    private Double longitude;
 
     @SerializedName("user_id")
     @Expose
     private Integer user_id;
 
-    public Problema(String titulo, String descricao, String tipodescricao, String foto, String localizacao, Integer user_id){
+    public Problema(String titulo, String descricao, String tipodescricao, Double latitude, Double longitude, String foto, Integer user_id){
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipodescricao = tipodescricao;
         this.foto = foto;
-        this.localizacao = localizacao;
         this.user_id = user_id;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getTitulo() {
@@ -53,10 +64,6 @@ public class Problema {
 
     public String getFoto() {
         return foto;
-    }
-
-    public String getLocalizacao() {
-        return localizacao;
     }
 
     public Integer getUser_id() {
@@ -79,11 +86,31 @@ public class Problema {
         this.foto = foto;
     }
 
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
-    }
-
     public void setUser_id(Integer user_id) {
         this.user_id = user_id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

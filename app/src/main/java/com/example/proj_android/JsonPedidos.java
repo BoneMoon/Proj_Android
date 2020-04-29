@@ -3,8 +3,10 @@ package com.example.proj_android;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 
 public interface JsonPedidos {
 
@@ -13,4 +15,12 @@ public interface JsonPedidos {
             @Header("Authorization")
             String token
     );
+
+    @POST("login")
+    Call<Users> PostUsers(
+            @Body
+            Users users
+    );
+
+
 }

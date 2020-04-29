@@ -83,11 +83,33 @@
                 android:hint="@string/palavra_passe"
                 android:textAlignment="center"/>
 
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_below="@+id/txtPasse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:layout_marginLeft="15dp"
+                android:text="Email"
+                android:textSize="15sp"
+                android:textColor="@color/Black"/>
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/txtEmail"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="5dp"
+                android:layout_below="@+id/editPasse"
+                android:hint="Email"
+                android:textAlignment="center"/>
+
             <Button
                 android:id="@+id/btnEntrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editPasse"
+                android:layout_below="@+id/editEmail"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:text="@string/entrarbtn"
