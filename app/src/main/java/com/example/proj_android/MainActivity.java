@@ -16,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String SHARED_PREFS = "token";
     EditText name;
     EditText password;
     EditText email;
@@ -44,9 +45,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
                 if(response.body() != null){
-                    //Users user = response.body();
-                    /*SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();*/
+                    Users user = response.body();
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("userid", user.getId());
+                    editor.putString("apitoken", user.getApi_token());
+                    editor.apply();
                     Intent i = new Intent(MainActivity.this, MapsActivity.class);
                     startActivity(i);
                 }else{

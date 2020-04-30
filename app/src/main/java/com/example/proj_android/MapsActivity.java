@@ -3,10 +3,13 @@ package com.example.proj_android;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.Locale;
+
+import static com.example.proj_android.MainActivity.SHARED_PREFS;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -47,6 +52,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         // Change the map type based on the user's selection.
         switch (item.getItemId()) {
+            case R.id.add:
+                Intent i = new Intent(MapsActivity.this, ProblemaActivity.class);
+                startActivity(i);
             case R.id.normal_map:
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 return true;
@@ -72,7 +80,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, INITIAL_ZOOM));
 
         setMapLongClick(mMap);
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        Toast.makeText(getApplicationContext(),preferences.getString("apitoken","Ola"),Toast.LENGTH_SHORT).show();
         setPoiClick(mMap);
+
     }
 
     private void setMapLongClick(final GoogleMap map) {

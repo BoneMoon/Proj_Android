@@ -29,6 +29,9 @@ public class ProblemaActivity extends AppCompatActivity {
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int REQUEST_IMAGE_ACESS = 1001;
     private TextView textLatLong;
+    private TextView probTit;
+    private TextView probDesc;
+    private TextView probTipo;
     private ImageView image;
     private Button button;
 
@@ -39,7 +42,12 @@ public class ProblemaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         textLatLong = findViewById(R.id.textLatLong);
+
+        probTit = findViewById(R.id.prob_titulo);
+        probDesc = findViewById(R.id.prob_desc);
+        probTipo = findViewById(R.id.prob_tipo);
         image = findViewById(R.id.image_guarda);
+
         button = findViewById(R.id.button_guarda);
 
         if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -135,4 +143,8 @@ public class ProblemaActivity extends AppCompatActivity {
     }
 
 
+    public void btnProblema(View view) {
+        Intent i = new Intent(ProblemaActivity.this, MapsActivity.class);
+        startActivity(i);
+    }
 }
