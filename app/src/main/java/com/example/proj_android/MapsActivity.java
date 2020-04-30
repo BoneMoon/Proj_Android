@@ -6,11 +6,16 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,6 +33,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     public static final float INITIAL_ZOOM = 18f;
+    public static final String EXTRA_LAT = "latitude";
+    public static final String EXTRA_LONG = "longitude";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +60,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Change the map type based on the user's selection.
         switch (item.getItemId()) {
             case R.id.add:
-                Intent i = new Intent(MapsActivity.this, ProblemaActivity.class);
-                startActivity(i);
+                LocationRequest locationRequest = new LocationRequest();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                LocationServices.getFusedLocationProviderClient(MapsActivity.this)
+                        .requestLocationUpdates(locationRequest, new LocationCallback() {
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                super.onLocationResult(locationResult);
+                                LocationServices.getFusedLocationProviderClient(MapsActivity.this);
+                                if (locationResult != null && locationResult.getLocations().size() > 0) {
+                                    int latestLocationIndex = locationResult.getLocations().size() - 1;
+                                    double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                                    double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
+                                    Intent intent = new Intent(MapsActivity.this, ProblemaActivity.class);
+                                    intent.putExtra(EXTRA_LAT, latitude);
+                                    intent.putExtra(EXTRA_LONG, longitude);
+                                    startActivity(intent);
+                                }
+                            }
+                        }, Looper.getMainLooper());
             case R.id.normal_map:
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 return true;
@@ -80,11 +105,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, INITIAL_ZOOM));
 
         setMapLongClick(mMap);
-
-        /*SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-        Toast.makeText(getApplicationContext(),preferences.getString("apitoken","Ola"),Toast.LENGTH_SHORT).show();*/
-        setPoiClick(mMap);
-
     }
 
     private void setMapLongClick(final GoogleMap map) {
@@ -99,18 +119,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .position(latLng)
                         .title("Pin")
                         .snippet(snippet));
-            }
-        });
-    }
 
-    private void setPoiClick(final GoogleMap map) {
-        map.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
-            @Override
-            public void onPoiClick(PointOfInterest poi) {
-                Marker poiMarker = mMap.addMarker(new MarkerOptions()
-                                    .position(poi.latLng)
-                                    .title(poi.name));
-                poiMarker.showInfoWindow();
+                Intent intent = new Intent(MapsActivity.this, ProblemaActivity.class);
+                intent.putExtra(EXTRA_LAT, latLng.latitude);
+                intent.putExtra(EXTRA_LONG, latLng.longitude);
+                startActivity(intent);
             }
         });
     }

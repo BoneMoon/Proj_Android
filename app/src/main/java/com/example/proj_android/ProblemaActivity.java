@@ -29,6 +29,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.proj_android.MainActivity.SHARED_PREFS;
+import static com.example.proj_android.MapsActivity.EXTRA_LAT;
+import static com.example.proj_android.MapsActivity.EXTRA_LONG;
 
 public class ProblemaActivity extends AppCompatActivity {
 
@@ -39,8 +41,8 @@ public class ProblemaActivity extends AppCompatActivity {
     private TextView probTit;
     private TextView probDesc;
     private TextView probTipo;
-    private double al;
-    private double lo;
+    private double latitude;
+    private double longitude;
     private ImageView image;
     private Button button;
 
@@ -50,8 +52,11 @@ public class ProblemaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_problema);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        textLatLong = findViewById(R.id.textLatLong);
+        Intent intent = getIntent();
+        latitude = intent.getDoubleExtra(EXTRA_LAT, 0.0);
+        longitude = intent.getDoubleExtra(EXTRA_LONG, 0.0);
 
+        textLatLong = findViewById(R.id.textLatLong);
         probTit = findViewById(R.id.prob_titulo);
         probDesc = findViewById(R.id.prob_desc);
         probTipo = findViewById(R.id.prob_tipo);
@@ -126,34 +131,13 @@ public class ProblemaActivity extends AppCompatActivity {
 
 
     private void getCurrentLocation() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        LocationServices.getFusedLocationProviderClient(ProblemaActivity.this)
-                .requestLocationUpdates(locationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(ProblemaActivity.this);
-                        if (locationResult != null && locationResult.getLocations().size() > 0) {
-                            int latestLocationIndex = locationResult.getLocations().size() - 1;
-                            double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                            double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
-                            textLatLong.setText(
-                                    String.format(
-                                            "Latitude: %s\nLongitude: %s",
-                                            latitude,
-                                            longitude
-                                    )
-                            );
-
-                            al=latitude;
-                            lo=longitude;
-                        }
-                    }
-                }, Looper.getMainLooper());
+        textLatLong.setText(
+                String.format(
+                        "Latitude: %s\nLongitude: %s",
+                        latitude,
+                        longitude
+                )
+        );
     }
 
     public void btnProblema(View view) {
@@ -162,7 +146,7 @@ public class ProblemaActivity extends AppCompatActivity {
         String token = preferences.getString("apitoken", "api");
 
         JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
-        Problema problema = new Problema(probTit.getText().toString(), probDesc.getText().toString(), probTipo.getText().toString(), al, lo, image.toString(), userId);
+        Problema problema = new Problema(probTit.getText().toString(), probDesc.getText().toString(), probTipo.getText().toString(), latitude, longitude, image.toString(), userId);
         Call<Problema> problemaCall = service.postProblema(token, problema);
 
         problemaCall.enqueue(new Callback<Problema>() {
