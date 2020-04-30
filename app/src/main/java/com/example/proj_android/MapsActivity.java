@@ -81,8 +81,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         setMapLongClick(mMap);
 
-        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-        Toast.makeText(getApplicationContext(),preferences.getString("apitoken","Ola"),Toast.LENGTH_SHORT).show();
+        /*SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        Toast.makeText(getApplicationContext(),preferences.getString("apitoken","Ola"),Toast.LENGTH_SHORT).show();*/
         setPoiClick(mMap);
 
     }

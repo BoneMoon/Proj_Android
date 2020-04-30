@@ -17,9 +17,11 @@ public interface JsonPedidos {
     );
 
     @POST("notas")
-    Call<List<Problema>> postProblema(
+    Call<Problema> postProblema(
             @Header("Authorization")
-                    String token
+                    String token,
+            @Body()
+            Problema problema
     );
 
     @POST("login")

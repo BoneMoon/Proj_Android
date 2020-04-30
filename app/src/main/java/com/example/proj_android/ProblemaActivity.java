@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,12 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.proj_android.MainActivity.SHARED_PREFS;
+
 public class ProblemaActivity extends AppCompatActivity {
 
     private static final int REQUEST_LOCATION = 1;
@@ -32,6 +39,8 @@ public class ProblemaActivity extends AppCompatActivity {
     private TextView probTit;
     private TextView probDesc;
     private TextView probTipo;
+    private double al;
+    private double lo;
     private ImageView image;
     private Button button;
 
@@ -58,6 +67,8 @@ public class ProblemaActivity extends AppCompatActivity {
             getCurrentLocation();
             return;
         }
+
+
     }
 
     @Override
@@ -137,14 +148,38 @@ public class ProblemaActivity extends AppCompatActivity {
                                             longitude
                                     )
                             );
+
+                            al=latitude;
+                            lo=longitude;
                         }
                     }
                 }, Looper.getMainLooper());
     }
 
-
     public void btnProblema(View view) {
-        Intent i = new Intent(ProblemaActivity.this, MapsActivity.class);
-        startActivity(i);
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        Integer userId = preferences.getInt("userid", 0);
+        String token = preferences.getString("apitoken", "api");
+
+        JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
+        Problema problema = new Problema(probTit.getText().toString(), probDesc.getText().toString(), probTipo.getText().toString(), al, lo, image.toString(), userId);
+        Call<Problema> problemaCall = service.postProblema(token, problema);
+
+        problemaCall.enqueue(new Callback<Problema>() {
+            @Override
+            public void onResponse(Call<Problema> call, Response<Problema> response) {
+                if(response.body() != null){
+                    Intent i = new Intent(ProblemaActivity.this, MapsActivity.class);
+                    startActivity(i);
+                }else{
+                    Toast.makeText(ProblemaActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Problema> call, Throwable t) {
+                Toast.makeText(ProblemaActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
