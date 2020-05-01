@@ -27,6 +27,10 @@ import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.proj_android.MainActivity.SHARED_PREFS;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -80,6 +84,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 }
                             }
                         }, Looper.getMainLooper());
+            case R.id.exit:
+                SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                String token = preferences.getString("apitoken", "");
+
+                if(token != null){
+                    JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
+                    Call<Users> logoutCall = service.PostLogout(token);
+                    logoutCall.enqueue(new Callback<Users>() {
+                        @Override
+                        public void onResponse(Call<Users> call, Response<Users> response) {
+                            Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure(Call<Users> call, Throwable t) {
+                            Toast.makeText(MapsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             case R.id.normal_map:
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 return true;

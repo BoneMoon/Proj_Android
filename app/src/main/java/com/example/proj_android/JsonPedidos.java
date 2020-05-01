@@ -30,5 +30,11 @@ public interface JsonPedidos {
             Users users
     );
 
+    @POST("logout")
+    Call<Users> PostLogout(
+            @Header("Authorization")
+                    String token
+    );
+
 
 }

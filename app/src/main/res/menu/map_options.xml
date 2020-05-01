@@ -9,6 +9,13 @@
         android:icon="@drawable/ic_add_black_24dp"
         app:showAsAction="always"
         />
+
+    <item
+        android:id="@+id/exit"
+        android:title=""
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/normal_map"
         android:title="Mapa Normal"
