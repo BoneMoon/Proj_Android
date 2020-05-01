@@ -131,14 +131,12 @@ public class ProblemaActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             //define a imagem para a imageView
              image.setImageURI(data.getData());
-
             /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Bitmap bitmap = BitmapFactory.decodeFile();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.id.image_guarda);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
-            String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
-
-            //Log.i("tag", imageString);
+            String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            Log.i("tag", imageString);*/
         }
     }
 

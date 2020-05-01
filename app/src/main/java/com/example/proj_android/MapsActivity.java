@@ -84,6 +84,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 }
                             }
                         }, Looper.getMainLooper());
+                return true;
             case R.id.exit:
                 SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
                 String token = preferences.getString("apitoken", "");
@@ -105,6 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     });
                 }
+                return true;
             case R.id.normal_map:
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 return true;
