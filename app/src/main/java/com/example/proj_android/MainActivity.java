@@ -66,4 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void btRegisto(View view) {
+        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+        startActivity(intent);
+    }
 }

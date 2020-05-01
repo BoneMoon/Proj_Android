@@ -30,6 +30,12 @@ public interface JsonPedidos {
             Users users
     );
 
+    @POST("register")
+    Call<Users> RegisterUsers(
+            @Body
+                    Users users
+    );
+
     @POST("logout")
     Call<Users> PostLogout(
             @Header("Authorization")
