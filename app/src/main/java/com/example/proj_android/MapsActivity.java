@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -39,6 +40,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final float INITIAL_ZOOM = 18f;
     public static final String EXTRA_LAT = "latitude";
     public static final String EXTRA_LONG = "longitude";
+    private List<Problema> probList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +77,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 LocationServices.getFusedLocationProviderClient(MapsActivity.this);
                                 if (locationResult != null && locationResult.getLocations().size() > 0) {
                                     int latestLocationIndex = locationResult.getLocations().size() - 1;
-                                    double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                                    double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
+                                    double latitude = 41.813299;
+                                    double longitude = -8.857961;
                                     Intent intent = new Intent(MapsActivity.this, ProblemaActivity.class);
                                     intent.putExtra(EXTRA_LAT, latitude);
                                     intent.putExtra(EXTRA_LONG, longitude);
@@ -125,13 +127,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
 
         LatLng home = new LatLng(41.813299, -8.857961);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, INITIAL_ZOOM));
 
         setMapLongClick(mMap);
+
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        String token = preferences.getString("apitoken", "api");
+        JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
+        Call<List<Problema>> getCall = service.getProblema(token);
+
+        getCall.enqueue(new Callback<List<Problema>>() {
+            @Override
+            public void onResponse(Call<List<Problema>> call, Response<List<Problema>> response) {
+                if(response.body() != null){
+                    probList = response.body();
+                    getMarker(probList);
+                }else{
+                    Toast.makeText(MapsActivity.this, "Não há notas!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Problema>> call, Throwable t) {
+                Toast.makeText(MapsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void setMapLongClick(final GoogleMap map) {
@@ -153,5 +178,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+    }
+
+    private void getMarker(List<Problema> list){
+        for (Problema problema: list) {
+            mMap.addMarker(
+                    new MarkerOptions()
+                    .position(new LatLng(problema.getLatitude(), problema.getLongitude()))
+                    .title(problema.getTitulo()));
+        }
     }
 }

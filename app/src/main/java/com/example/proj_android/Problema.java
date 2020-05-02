@@ -30,17 +30,17 @@ public class Problema {
 
     @SerializedName("latitude")
     @Expose
-    private Double latitude;
+    private double latitude;
 
     @SerializedName("longitude")
     @Expose
-    private Double longitude;
+    private double longitude;
 
     @SerializedName("user_id")
     @Expose
     private Integer user_id;
 
-    public Problema(String titulo, String descricao, String tipodescricao, Double latitude, Double longitude, String foto, Integer user_id){
+    public Problema(String titulo, String descricao, String tipodescricao, double latitude, double longitude, String foto, Integer user_id){
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipodescricao = tipodescricao;

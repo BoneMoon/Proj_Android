@@ -12,9 +12,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +54,8 @@ public class ProblemaActivity extends AppCompatActivity {
     private double longitude;
     private ImageView image;
     private Button button;
+    private Bitmap bitmap;
+    private String imageString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +64,11 @@ public class ProblemaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        latitude = intent.getDoubleExtra(EXTRA_LAT, 0.0);
-        longitude = intent.getDoubleExtra(EXTRA_LONG, 0.0);
+        double latitude1 = intent.getDoubleExtra(EXTRA_LAT, 0.0);
+        double longitude1 = intent.getDoubleExtra(EXTRA_LONG, 0.0);
+
+        latitude = latitude1;
+        longitude = longitude1;
 
         textLatLong = findViewById(R.id.textLatLong);
         probTit = findViewById(R.id.prob_titulo);
@@ -129,14 +137,21 @@ public class ProblemaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            //define a imagem para a imageView
-             image.setImageURI(data.getData());
-            /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.id.image_guarda);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] imageBytes = baos.toByteArray();
-            String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            Log.i("tag", imageString);*/
+            try {
+                image.setImageURI(data.getData());
+                Uri picturePath = data.getData();
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), picturePath);
+                image.setImageBitmap(bitmap);
+                //Log.i("bit", bitmap.toString());
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 1, stream);
+                byte[] imageBytes = stream.toByteArray();
+                imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                Log.i("bit", String.valueOf(imageString.length()));
+                Log.i("bit", imageString.trim());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
