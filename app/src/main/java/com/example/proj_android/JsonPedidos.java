@@ -2,6 +2,7 @@ package com.example.proj_android;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -45,11 +46,11 @@ public interface JsonPedidos {
     );
 
     @DELETE("notas/{id}")
-    Call<Problema> deleteProblema(
+    Call<ResponseBody> deleteProblema(
             @Header("Authorization")
                     String token,
-            @Body()
-                    String id
+            @Path("id")
+                    Integer id
     );
 
     @POST("login")

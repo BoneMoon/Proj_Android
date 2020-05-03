@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,6 +29,7 @@ public class getProblemaActivity extends AppCompatActivity {
     private double longitude;
     private ImageView image;
     private  Integer id;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +56,8 @@ public class getProblemaActivity extends AppCompatActivity {
         latitude = lat;
         longitude = lon;
 
-
-
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-        String token = preferences.getString("apitoken", "api");
+        token = preferences.getString("apitoken", "api");
 
         JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
         Call<Problema> getproblemaCall = service.getUmProblema(token, id);
@@ -81,6 +81,22 @@ public class getProblemaActivity extends AppCompatActivity {
     }
 
     public void btnApagar(View view) {
+        JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
+        Call<ResponseBody> deleteProb = service.deleteProblema(token, id);
+
+        deleteProb.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Intent i = new Intent(getProblemaActivity.this, MapsActivity.class);
+                startActivity(i);
+                Toast.makeText(getApplicationContext(),"Note Deleted",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     public void btnAtualizar(View view) {
