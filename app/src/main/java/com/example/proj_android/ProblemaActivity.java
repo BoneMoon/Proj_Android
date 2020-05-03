@@ -72,8 +72,8 @@ public class ProblemaActivity extends AppCompatActivity {
 
         textLatLong = findViewById(R.id.textLatLong);
         probTit = findViewById(R.id.prob_titulo);
-        probDesc = findViewById(R.id.prob_desc);
-        probTipo = findViewById(R.id.prob_tipo);
+        probDesc = findViewById(R.id.desc_prob_text);
+        probTipo = findViewById(R.id.tipo_prob_text);
         image = findViewById(R.id.image_guarda);
 
         button = findViewById(R.id.button_guarda);

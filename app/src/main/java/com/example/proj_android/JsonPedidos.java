@@ -8,6 +8,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface JsonPedidos {
 
@@ -17,12 +18,12 @@ public interface JsonPedidos {
             String token
     );
 
-    @GET("notas/{nota}")
+    @GET("notas/{id}")
     Call<Problema> getUmProblema(
             @Header("Authorization")
                     String token,
-            @Body()
-                    String id
+            @Path("id")
+                    Integer id
     );
 
     @POST("notas")
@@ -33,15 +34,17 @@ public interface JsonPedidos {
                     Problema problema
     );
 
-    @POST("notas/{nota}")
+    @POST("notas/{id}")
     Call<Problema> updateProblema(
             @Header("Authorization")
                     String token,
             @Body()
-                    Problema problema
+                    Problema problema,
+            @Path("id")
+                    Integer id
     );
 
-    @DELETE("notas/{nota}")
+    @DELETE("notas/{id}")
     Call<Problema> deleteProblema(
             @Header("Authorization")
                     String token,

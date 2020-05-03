@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -135,6 +137,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         setMapLongClick(mMap);
 
+        setInfoWindowClickToPanorama(googleMap);
+
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         String token = preferences.getString("apitoken", "api");
         JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
@@ -187,5 +191,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .position(new LatLng(problema.getLatitude(), problema.getLongitude()))
                     .title(problema.getTitulo()));
         }
+    }
+
+    private void setInfoWindowClickToPanorama(GoogleMap map) {
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                for(Problema problema: probList){
+                    if(probList != null){
+                        LatLng l = new LatLng(problema.getLatitude(), problema.getLongitude());
+                        if(l.equals(marker.getPosition())){
+                            Intent intent = new Intent(MapsActivity.this, getProblemaActivity.class);
+                            intent.putExtra("tit", problema.getTitulo());
+                            intent.putExtra("desc", problema.getDescricao());
+                            intent.putExtra("tipo", problema.getTipodescricao());
+                            intent.putExtra("img", problema.getFoto());
+                            intent.putExtra("lat", problema.getLatitude());
+                            intent.putExtra("lon", problema.getLongitude());
+                            intent.putExtra("id", problema.getId());
+                            startActivity(intent);
+                        }
+                    }
+                }
+            }
+        });
     }
 }
