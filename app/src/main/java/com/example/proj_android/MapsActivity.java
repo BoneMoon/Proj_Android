@@ -209,6 +209,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             intent.putExtra("lat", problema.getLatitude());
                             intent.putExtra("lon", problema.getLongitude());
                             intent.putExtra("id", problema.getId());
+                            intent.putExtra("idU", problema.getUser_id());
                             startActivity(intent);
                         }
                     }

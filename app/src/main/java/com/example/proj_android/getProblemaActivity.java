@@ -29,6 +29,7 @@ public class getProblemaActivity extends AppCompatActivity {
     private double longitude;
     private ImageView image;
     private  Integer id;
+    private Integer idU;
     private String token;
 
     @Override
@@ -52,6 +53,7 @@ public class getProblemaActivity extends AppCompatActivity {
         double lon = intent.getDoubleExtra("lon", 0.0);
         Intent i = getIntent();
         id = i.getIntExtra("id", 0);
+        idU = i.getIntExtra("idU", 0);
 
         latitude = lat;
         longitude = lon;
@@ -81,49 +83,63 @@ public class getProblemaActivity extends AppCompatActivity {
     }
 
     public void btnApagar(View view) {
-        JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
-        Call<ResponseBody> deleteProb = service.deleteProblema(token, id);
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        Integer userId = preferences.getInt("userid", 0);
 
-        deleteProb.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Intent i = new Intent(getProblemaActivity.this, MapsActivity.class);
-                startActivity(i);
-                Toast.makeText(getApplicationContext(),"Note Deleted",Toast.LENGTH_SHORT).show();
-            }
+        if(userId != idU){
+            Toast.makeText(getApplicationContext(),"Não pode apagar nota!",Toast.LENGTH_SHORT).show();
+        }else{
+            JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
+            Call<ResponseBody> deleteProb = service.deleteProblema(token, id);
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            deleteProb.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Intent i = new Intent(getProblemaActivity.this, MapsActivity.class);
+                    startActivity(i);
+                    Toast.makeText(getApplicationContext(),"Note Deleted",Toast.LENGTH_SHORT).show();
+                }
 
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(),"Erro",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
     }
 
     public void btnAtualizar(View view) {
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         String token = preferences.getString("apitoken", "api");
         Integer userId = preferences.getInt("userid", 0);
-        JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
-        Problema problema = new Problema(probTit.getText().toString(), probDesc.getText().toString(), probTipo.getText().toString(), latitude, longitude, "asdd", userId);
 
-        Call<Problema> updateCall = service.updateProblema(token, problema, id);
-        updateCall.enqueue(new Callback<Problema>() {
-            @Override
-            public void onResponse(Call<Problema> call, Response<Problema> response) {
-                if(response.body() != null){
-                    Intent i = new Intent(getProblemaActivity.this, MapsActivity.class);
-                    startActivity(i);
-                }else{
-                    Toast.makeText(getProblemaActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+        if(userId != idU){
+            Toast.makeText(getApplicationContext(),"Não pode atualizar a nota!",Toast.LENGTH_SHORT).show();
+        }else{
+            JsonPedidos service = RetrofitClientInstance.getRetrofitInstance().create(JsonPedidos.class);
+            Problema problema = new Problema(probTit.getText().toString(), probDesc.getText().toString(), probTipo.getText().toString(), latitude, longitude, "asdd", userId);
+
+            Call<Problema> updateCall = service.updateProblema(token, problema, id);
+            updateCall.enqueue(new Callback<Problema>() {
+                @Override
+                public void onResponse(Call<Problema> call, Response<Problema> response) {
+                    if(response.body() != null){
+                        Intent i = new Intent(getProblemaActivity.this, MapsActivity.class);
+                        startActivity(i);
+                        Toast.makeText(getApplicationContext(),"Note Updated",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getProblemaActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Problema> call, Throwable t) {
+                @Override
+                public void onFailure(Call<Problema> call, Throwable t) {
 
-            }
-        });
-
+                }
+            });
+        }
     }
 
     public void pickImages(View view) {
